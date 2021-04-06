@@ -1,0 +1,15 @@
+&keyParameters
+
+networkType = SF, 
+weightsDistType = PowerLaw,
+AABeg = 5.0,
+AAEnd = 7.0,
+AAGap = 0.2,
+timesRepeated = 200,
+initialFrequencyA = 0.4,
+isPayoffAveraged = 1,
+totalNumLoopSimulation = 2,
+generationNumPerLoop = 10000000,
+sampleStartLoopIndex = 1,
+
+/
