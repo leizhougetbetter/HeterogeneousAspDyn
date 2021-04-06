@@ -51,7 +51,7 @@ Fortran 90 files for **Monte Carlo simulations** was tested using *Intel(R) Visu
 
 All files of **Monte Carlo simulations** and the dynamical library file  *libiomp5md.lib* should be put in the same folder. 
 
-The default parameter setting is for population size $N=100$ on the scale-free network with a power-law edge weight distribution. To change the network type to other types of network structure or edge weight distribution, change the first line from *networkType = SF* to *networkType = RG* or *networkType = RRG* and the second line from *weightsDistType = PowerLaw* to *weightsDistType = Homogeneous* or *weightsDistType = Uniform* in the **simulationParameters.inp** file.
+The default parameter setting is for population size $N=100$ on the scale-free network with a power-law edge weight distribution with a shared aspiration value (=2) and update function (the Fermi function). To change the network type to other types of network structure or edge weight distribution, change the first line from *networkType = SF* to *networkType = RG* or *networkType = RRG* and the second line from *weightsDistType = PowerLaw* to *weightsDistType = Homogeneous* or *weightsDistType = Uniform* in the **simulationParameters.inp** file.
 
 This program generates an output file named *numA_Dist_TT_Z_SS_U* where *Z* represents the current payoff value $T$ and *U* the current payoff value $S$. In this output file, each row corresponds to one repetition (i.e., run) that records one distribution of the number of strategy A sampled in the simulation. 
 
