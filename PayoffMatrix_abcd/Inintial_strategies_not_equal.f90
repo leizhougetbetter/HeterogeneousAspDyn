@@ -21,7 +21,7 @@ subroutine Inital_strategies_not_equal()
 
     ! A players
     do while (indexCount <= NINT(initialFrequencyA * Ntotal))
-        call RNUND(Ntotal, randIntegerArray)
+		errcodeRand = virnguniform(methodRand, streamRand, 1, randIntegerArray, 1, Ntotal+1)
         randInteger = randIntegerArray(1)
         if(indexTotal(randInteger) /= -1)then
             indexC(indexCount) = randInteger

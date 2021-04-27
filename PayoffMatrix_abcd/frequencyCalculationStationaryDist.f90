@@ -44,8 +44,6 @@ subroutine frequencyCalculationStationaryDist(timesRepeated)
     !!!! set the size of array nodeRandUpdate and randNumUseUpdate
     allocate(nodeRandUpdate(generationNumPerLoop))
     allocate(randNumUseUpdate(generationNumPerLoop))
-    !!!! reset the random number seed
-    call RNSET(0)
     !!!
     AA_Loop: do AAvalue = AABeg, AAEnd + 0.001, AAGap
             write(AAvalueStr, "(F5.2)") AAvalue
@@ -81,8 +79,7 @@ subroutine frequencyCalculationStationaryDist(timesRepeated)
                     !!! reset the random numbers  
                     nodeRandUpdate = -1.0 
                     !!! generate random nodes that are chosen to update
-                    call RNUND(Ntotal, nodeRandUpdate)
-                    
+                    errcodeRand = virnguniform(methodRand, streamRand, generationNumPerLoop, nodeRandUpdate, 1, Ntotal+1)
                     !!!! check if there is any node randomly sampled that exceeds the population size
                     if(any(nodeRandUpdate > Ntotal))then
                         !write(*,*) "Updated Nodes exceed Population size -- ReDraw!!"
@@ -91,7 +88,7 @@ subroutine frequencyCalculationStationaryDist(timesRepeated)
                         !!! redraw the nodes that exceed population size
                         do iNodeRandExceed = 1, numNodeRandExceedNtotal
                             indexNodeRandExceedNtotal = maxloc(nodeRandUpdate, dim=1)
-                            call RNUND(Ntotal, nodeRandReDraw)
+							errcodeRand = virnguniform(methodRand, streamRand, generationNumPerLoop, nodeRandReDraw, 1, Ntotal+1)
                             nodeRandUpdate(indexNodeRandExceedNtotal) = nodeRandReDraw(1)
                         end do
                     end if
@@ -102,7 +99,7 @@ subroutine frequencyCalculationStationaryDist(timesRepeated)
                     !!
                     !! Generate random numbers used in the strategy updating
                     randNumUseUpdate = -1.0
-                    call RNUN(randNumUseUpdate)
+					errcodeRand = vdrnguniform(methodRand, streamRand, generationNumPerLoop, randNumUseUpdate, real(0.0,8), real(1.0,8))
                     !!!
                     generationLoop:do while(run <= generationNumPerLoop)
                         !!! ------Play games and Update strategies------- !!!
