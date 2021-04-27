@@ -1,10 +1,13 @@
-!-----------------2021-4-5-------------------------------------------------------------!
+!-----------------2021-4-27-------------------------------------------------------------!
 ! Aspiration dynamics generate robust predictions in heterogeneous populations         !
 !- Coauther with BinWu, Jinming Du, Long Wang                                          !
 !- For R=1, P=0 games, arbitrary update functions                                      !
 !--------------------------------------------------------------------------------------!
+INCLUDE 'mkl_vsl.f90'
 module global
-    use MT_PNRG
+    !!!! using the MKL lib
+	use MKL_VSL_TYPE
+	use MKL_VSL
     implicit none
     !!!! Ntotal: the number of indiviudals (or the population size)
     integer,parameter::Ntotal = 100
@@ -50,6 +53,10 @@ module global
     character(4),save::networkType
     !!! weightsDistType: the type of edge weight distributions (homogeneous, uniform, or power-law)
     character(20),save::weightsDistType
+    !!! random number generator parameters
+	type(VSL_STREAM_STATE):: streamRand
+	integer, save:: methodRand = VSL_RNG_METHOD_UNIFORM_STD
+	integer, save:: errcodeRand
     !!!
     type structuredPopulations
         !!!!! neighbor index
@@ -61,8 +68,6 @@ module global
     !
 end module
     
-INCLUDE 'link_fnl_static.h'
-!DEC$ OBJCOMMENT LIB:'libiomp5md.lib'
 program main
     use global
     implicit none
@@ -73,6 +78,9 @@ program main
     character(32)::inputFileNameAspDyn
     character(24)::inputFileNameSimulation
     logical::alive
+	!!!
+	integer::currentCPUTime
+	integer::brngRand, seedRand
     !!!
     namelist /keyParameters/ networkType, weightsDistType, SSBeg, SSEnd, SSGap, &
                             & TTBeg, TTEnd, TTGap, timesRepeated, &
@@ -185,14 +193,21 @@ program main
     elseif(any(updateFunctionParam3 < 0))then
         write(*,*) "Parameters of update functions is LESS THAN zero!"
         stop
-    end if
-    
-    !!! the setting of random number generators
-    !!!! RNOPT(8) --- A 32-bit Mersenne Twister generator is used.
-    !!! RNOPT(9) --- A 64-bit Mersenne Twister generator is used.
-    call RNOPT(8)  
+	end if
+
+	!!! the setting of random number generators
+    call system_clock(currentCPUTime)
+    !!!WRITE(*,*) 'cpu time', currentCPUTime
+	seedRand = currentCPUTime
+	!!!! Mersenne Twister generator
+	brngRand = VSL_BRNG_MT19937
+	methodRand = VSL_RNG_METHOD_UNIFORM_STD
+	!!!! initialize the random number generator
+	errcodeRand = vslnewstream(streamRand, brngRand, seedRand)
     !!!!
     call frequencyCalculationStationaryDist(timesRepeated)
+	!!!
+	errcodeRand = vsldeletestream(streamRand)
     !stop
 end
     
