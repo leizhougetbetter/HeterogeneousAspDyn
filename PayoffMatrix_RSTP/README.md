@@ -19,8 +19,6 @@ In this version of the code, the game payoff matrix is parameterized by $R, S, T
 
 - *HeteroAspirationUpdateRule.f90*: The randomly selected individual compares its aspiration value with its payoff and updates its strategy based on the aspiration-based update function. Here, each individual can have its own update function (including the case where everyone shares the same update function). 
 
-- *MT_PNRG.f90*: A module contains the random number generators from the IMSL library. 
-
 - *AspirationDynamicsParameters.txt*: This input file contains parameters including the payoff matrix, the selection intensity, personalized aspiration values, and parameters for individualized update functions.
 
 - *simulationParameters.inp*: This input file contains the parameters for the simulation setting, including
@@ -45,11 +43,11 @@ In this version of the code, the game payoff matrix is parameterized by $R, S, T
 
 ## Dependencies
 
-Fortran 90 files for **Monte Carlo simulations** was tested using *Intel(R) Visual Fortran* version 13.0.3600.2010 and IMSL Fortran Numerical Library version 6.0 under Microsoft Visual Studio 2010 Version 10.0.30319.1. To use the random number generator, the IMSL static library is needed, in particular the dynamical library *libiomp5md.lib*. 
+Fortran 90 files for **Monte Carlo simulations** was tested using *Intel(R) Fortran Compiler* version 19.2.0061.16 and Intel(R) oneAPI Math Kernal Library under Microsoft Visual Studio Community 2019 with Intel oneAPI Base and HPC Toolkit 2021.
 
 ## Running the software
 
-All files of **Monte Carlo simulations** and the dynamical library file  *libiomp5md.lib* should be put in the same folder. 
+All files of **Monte Carlo simulations** should be put in the same folder. 
 
 The default parameter setting is for population size $N=100$ on the scale-free network with a power-law edge weight distribution with a shared aspiration value (=2) and update function (the Fermi function). To change the network type to other types of network structure or edge weight distribution, change the first line from *networkType = SF* to *networkType = RG* or *networkType = RRG* and the second line from *weightsDistType = PowerLaw* to *weightsDistType = Homogeneous* or *weightsDistType = Uniform* in the **simulationParameters.inp** file.
 
